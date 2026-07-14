@@ -17,6 +17,8 @@ import {
 } from "@expo-google-fonts/manrope";
 
 import { useCallback, useEffect, useState } from "react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/utils/queryClient";
 
 export default function RootLayout() {
 
@@ -53,10 +55,13 @@ export default function RootLayout() {
   }
 
   return <SafeAreaProvider>
-    <View className="flex-1 bg-cream">
-      <Stack screenOptions={{ headerShown: false, animation: "ios_from_right" }}>
-        <Stack.Screen name="(tabs)" />
-      </Stack>
-    </View>
+    <QueryClientProvider client={queryClient}>
+      <View className="flex-1 bg-cream">
+        <Stack screenOptions={{ headerShown: false, animation: "ios_from_right" }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="product/[id]" options={{ presentation: "card" }} />
+        </Stack>
+      </View>
+    </QueryClientProvider>
   </SafeAreaProvider>
 }

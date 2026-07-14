@@ -1,10 +1,12 @@
-import { Text, View, ScrollView, Pressable, FlatList } from "react-native";
+import { Text, View, ScrollView, Pressable, FlatList, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { SectionHeader } from "@/components/SectionHeader";
 import { CATEGORY_LABELS } from "@/constants/theme";
+import { useProducts } from "@/hooks/useProducts";
+import { ProductCard } from "@/components/ProductCard";
 
 const CATEGORY_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   skincare: "water-outline",
@@ -15,11 +17,22 @@ const CATEGORY_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
 };
 
 export default function HomeScreen() {
+
+  const featured = useProducts({ featured: true, limit: 6 });
+  const sale = useProducts({ sale: true, limit: 6 });
+
+  const isRefreshing = featured.isFetching || sale.isFetching;
+
+  const onRefresh = () => {
+    featured.refetch();
+    sale.refetch();
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-cream" edges={["top"]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-      //refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor="#D97757" />}
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor="#D97757" />}
       >
         <View className="flex-row items-center justify-between px-5 pt-2">
           <View>
@@ -89,7 +102,14 @@ export default function HomeScreen() {
             title="Featured picks"
             onPressAction={() => router.push({ pathname: "/(tabs)/shop", params: { featured: "true" } })}
           />
-  // add flatlist here for featured products
+          <FlatList
+            data={featured.data?.data ?? []}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item._id}
+            contentContainerStyle={{ paddingHorizontal: 20, gap: 14 }}
+            renderItem={({ item }) => <ProductCard product={item} width={168} />}
+          />
         </View>
 
         <View className="mb-8 mt-8">
@@ -98,8 +118,14 @@ export default function HomeScreen() {
             title="On sale now"
             onPressAction={() => router.push({ pathname: "/(tabs)/shop", params: { sale: "true" } })}
           />
-         // add flatlist here for sale products
-
+          <FlatList
+            data={sale.data?.data ?? []}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item._id}
+            contentContainerStyle={{ paddingHorizontal: 20, gap: 14 }}
+            renderItem={({ item }) => <ProductCard product={item} width={168} />}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

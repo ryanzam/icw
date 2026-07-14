@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const productSchema = new mongoose.Schema(
     {
         name: { type: String, required: true, trim: true },
@@ -17,7 +19,7 @@ const productSchema = new mongoose.Schema(
         stock: { type: Number, required: true, default: 0, min: 0 },
         rating: { type: Number, default: 0 },
         numReviews: { type: Number, default: 0 },
-        reviews: [reviewSchema],
+        //reviews: [reviewSchema],
         isFeatured: { type: Boolean, default: false },
         isOnSale: { type: Boolean, default: false },
         freeDelivery: { type: Boolean, default: true },
