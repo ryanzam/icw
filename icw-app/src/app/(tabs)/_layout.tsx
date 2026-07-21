@@ -1,7 +1,6 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "react-native";
-import { useProducts } from "@/hooks/useProducts";
 
 function TabIcon({
     name,
@@ -32,10 +31,6 @@ function TabIcon({
 export default function TabsLayout() {
     const totalItems = 3 // replace this with actual data
 
-    const featured = useProducts({ featured: true, limit: 6 });
-
-    console.log({ featured })
-
     return (
         <Tabs
             screenOptions={{
@@ -49,7 +44,7 @@ export default function TabsLayout() {
                     borderTopColor: "#F5D3C6",
                     height: 84,
                     paddingTop: 8,
-                    paddingBottom: 20,
+                    paddingBottom: 20
                 },
             }}
         >
