@@ -3,10 +3,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
-import { SectionHeader } from "@/components/SectionHeader";
-import { CATEGORY_LABELS } from "@/constants/theme";
-import { useProducts } from "@/hooks/useProducts";
-import { ProductCard } from "@/components/ProductCard";
+import { SectionHeader } from "../../components/SectionHeader";
+import { CATEGORY_LABELS } from "../../constants/theme";
+import { useProducts } from "../../hooks/useProducts";
+import { ProductCard } from "../../components/ProductCard";
 
 const CATEGORY_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   skincare: "water-outline",
@@ -29,7 +29,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-cream" edges={["top"]}>
+    <SafeAreaView className="flex-1">
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor="#D97757" />}
@@ -37,9 +37,9 @@ export default function HomeScreen() {
         <View className="flex-row items-center justify-between px-5 pt-2">
           <View>
             <Text className="font-sans text-xs text-plum-400">
-              Hello, User
+              {"Welcome"}
             </Text>
-            <Text className="font-display text-2xl text-plum-700">Iris Cosmo World</Text>
+            <Text className="font-display text-2xl text-plum-700">ICW</Text>
           </View>
           <Pressable
             onPress={() => router.push("/(tabs)/shop")}
@@ -131,3 +131,4 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
+
