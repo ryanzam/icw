@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import Constants from "expo-constants";
-import * as SecureStore from "expo-secure-store";
+//import * as SecureStore from "expo-secure-store";
+import { secureStorage } from "../utils/secureStorage";
 
 const FALLBACK_URL = "http://localhost:4000/api";
 
@@ -18,12 +19,18 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use(async (config) => {
+    const token = await secureStorage.getItem(TOKEN_KEY);
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+});
+
+/* apiClient.interceptors.request.use(async (config) => {
     const token = await SecureStore.getItemAsync(TOKEN_KEY);
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
-});
+}); */
 
 export function getErrorMessage(error: unknown): string {
     if (axios.isAxiosError(error)) {
