@@ -1,4 +1,3 @@
-import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
@@ -6,8 +5,8 @@ import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import type { Product } from "@/types";
 import { formatPrice } from "@/constants/theme";
-//import { useCartStore } from "@/store/cartStore";
 import { StarRating } from "./StarRating";
+import { useCartStore } from "@/store/cartStore";
 
 interface ProductCardProps {
     product: Product;
@@ -15,12 +14,15 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, width }: ProductCardProps) {
-    //const addItem = useCartStore((s) => s.addItem);
+    const addItem = useCartStore((s) => s.addItem);
     const outOfStock = product.stock <= 0;
 
     return (
         <Pressable
-            //onPress={() => router.push(`/product/${product._id}`)}
+            onPress={() => router.push({
+                pathname: '/product/[id]',
+                params: { id: product._id }
+            })}
             style={width ? { width } : undefined}
             className="mb-4 overflow-hidden rounded-3xl bg-white"
         >
@@ -45,7 +47,7 @@ export function ProductCard({ product, width }: ProductCardProps) {
                         e.stopPropagation?.();
                         if (outOfStock) return;
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => { });
-                        //addItem(product, 1);
+                        addItem(product, 1);
                     }}
                     className="absolute bottom-3 right-3 h-10 w-10 items-center justify-center rounded-full bg-plum-600/90 shadow-sm"
                 >
